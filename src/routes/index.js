@@ -1,3 +1,3 @@
-const router = async (req, res) => (console.log("hola"))
+const router = async (req, res) => (res.send("hola"))
 
 module.exports = router;
