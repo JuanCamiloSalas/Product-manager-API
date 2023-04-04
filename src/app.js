@@ -3,13 +3,15 @@ const routes = require("./routes/index.js");
 const cors = require("cors");
 const morgan = require("morgan");
 
-// Initializations
+// Initialization
 const app = express();
 
 // Middlewares
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors());
-app.use(morgan("dev"));
+
+// Configurations
 app.options('*', cors({
     allowedHeaders: ['x-auth-token']
 }));
@@ -24,7 +26,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Routes
+// Route
 app.use("/api", routes);
 
 module.exports = app;
