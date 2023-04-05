@@ -3,6 +3,7 @@
         "API",
         "helpers",
         "models",
-        "routes"
+        "routes",
+        "middlewares"
     ]
 }
