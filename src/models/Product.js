@@ -19,9 +19,10 @@ module.exports = (sequelize) => {
         price: {
             type: DataTypes.FLOAT,
             allowNull: false,
-            set(value) {
-                this.setDataValue('area', roundPrice(value));
-            }
+        },
+        active: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
         }
     });
 }
