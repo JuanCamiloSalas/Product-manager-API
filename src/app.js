@@ -3,15 +3,17 @@ const routes = require("./routes/index.js");
 const cors = require("cors");
 const morgan = require("morgan");
 
+// Swagger
+const swaggerUI = require("swagger-ui-express");
+const swaggerjsDoc = require("swagger-jsdoc");
+
 // Initialization
 const app = express();
 
-// Middlewares
+// Settings
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors());
-
-// Configurations
 app.options('*', cors({
     allowedHeaders: ['x-auth-token']
 }));
@@ -26,7 +28,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Route
+// Routes
 app.use("/api", routes);
 
 module.exports = app;
