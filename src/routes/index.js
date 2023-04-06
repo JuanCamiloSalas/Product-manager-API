@@ -7,11 +7,15 @@ const products = require("./products/index.js");
 
 const router = Router();
 
-const authorization = require("../middlewares/auth.js");
+// Middlewares
+const { 
+    authentication,
+    authorization,
+} = require("../middlewares/index.js");
 
 router.use("/auth", auth);
-router.use("/admin", authorization, admin);
-router.use("/categories", authorization, categories);
+router.use("/admin", authentication, authorization, admin);
+router.use("/categories", authentication, authorization, categories);
 router.use("/products", products);
 
 module.exports = router;
