@@ -24,10 +24,10 @@ const {
 // Routes
 router.get("/", getProducts);
 router.get("/:id", getProductById);
+router.post("/csv", authentication, authorization, uploadFile, readFile, convertCSV, createProducts);
 router.post("/", authentication, authorization, createProduct);
 router.put("/:id/hide", authentication, authorization, hideProduct);
 router.put("/:id", authentication, authorization, updateProduct);
 router.delete("/:id", authentication, authorization, deleteProduct);
-router.post("/csv", authentication, authorization, uploadFile, readFile, convertCSV, createProducts);
 
 module.exports = router;
