@@ -2,13 +2,20 @@ const { Router } = require("express");
 const router = Router();
 
 // Middlewares
-const authorization = require("../../middlewares/auth.js");
+const {
+    authentication,
+    authorization,
+    uploadFile,
+    readFile,
+    convertCSV,
+} = require("../../middlewares//index.js");
 
 // Controllers
-const { 
+const {
     getProducts,
     getProductById, 
     createProduct,
+    createProducts,
     updateProduct,
     deleteProduct,
     hideProduct,
@@ -17,9 +24,10 @@ const {
 // Routes
 router.get("/", getProducts);
 router.get("/:id", getProductById);
-router.post("/", authorization, createProduct);
-router.put("/:id/hide", authorization, hideProduct);
-router.put("/:id", authorization, updateProduct);
-router.delete("/:id", authorization, deleteProduct);
+router.post("/", authentication, authorization, createProduct);
+router.put("/:id/hide", authentication, authorization, hideProduct);
+router.put("/:id", authentication, authorization, updateProduct);
+router.delete("/:id", authentication, authorization, deleteProduct);
+router.post("/csv", authentication, authorization, uploadFile, readFile, convertCSV, createProducts);
 
 module.exports = router;
