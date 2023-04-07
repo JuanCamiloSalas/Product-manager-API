@@ -14,8 +14,15 @@ const signUpController = async (req, res) => {
         const salt = await bcryptjs.genSalt(10);
         const newPassword = await bcryptjs.hash(password, salt);
 
-        // Crear el usuario
-        const newUser = await User.create({ password: newPassword, email, name });
+        // Crear el usuario si no existe el correo en la DB
+        const [ newUser, created ] = await User.findOrCreate({
+            where: { email: { [Op.iLike]: `${email}` } }, 
+            defaults: { password: newPassword, email, name }
+        });
+        
+        if (!created) {
+            return res.status(400).json({errors: [{ msg: `Ya existe un usuario con el email ${email}`}]});
+        }
 
         // Crear el payload del JWT
         const payload = {
