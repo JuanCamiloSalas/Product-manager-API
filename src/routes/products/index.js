@@ -10,6 +10,17 @@ const {
     convertCSV,
 } = require("../../middlewares/index.js");
 
+// Validators
+const {
+    validateGetProducts,
+    validateGetProductById, 
+    validateCreateProduct,
+    validateCreateProducts,
+    validateUpdateProduct,
+    validateDeleteProduct,
+    validateHideProduct,
+} = require("../../validators/products.js");
+
 // Controllers
 const {
     getProducts,
@@ -22,12 +33,53 @@ const {
 } = require("../../controllers/products");
 
 // Routes
-router.get("/", getProducts);
-router.get("/:id", authentication, getProductById);
-router.post("/csv", authentication, authorization, uploadFile, readFile, convertCSV, createProducts);
-router.post("/", authentication, authorization, createProduct);
-router.put("/:id/hide", authentication, authorization, hideProduct);
-router.put("/:id", authentication, authorization, updateProduct);
-router.delete("/:id", authentication, authorization, deleteProduct);
+router.get("/", 
+    validateGetProducts, 
+    getProducts
+);
+
+router.get("/:id", 
+    authentication, 
+    validateGetProductById, 
+    getProductById
+);
+
+router.post("/csv", 
+    authentication, 
+    authorization, 
+    uploadFile, 
+    readFile, 
+    convertCSV, 
+    // validateCreateProducts,
+    createProducts
+);
+
+router.post("/", 
+    authentication, 
+    authorization, 
+    validateCreateProduct, 
+    createProduct
+);
+
+router.put("/:id/hide", 
+    authentication, 
+    authorization, 
+    validateHideProduct, 
+    hideProduct
+);
+
+router.put("/:id", 
+    authentication, 
+    authorization, 
+    validateUpdateProduct, 
+    updateProduct
+);
+
+router.delete("/:id", 
+    authentication, 
+    authorization, 
+    validateDeleteProduct, 
+    deleteProduct
+);
 
 module.exports = router;

@@ -7,6 +7,14 @@ const {
     authorization,
 } = require("../../middlewares/index.js");
 
+// Validators
+const {
+    validateGetCategories,
+    validateCreateCategory,
+    validateUpdateCategory,
+    validateDeleteCategory,
+} = require("../../validators/categories.js");
+
 // Controllers
 const {
     getCategories, 
@@ -16,9 +24,30 @@ const {
 } = require("../../controllers/categories/index.js");
 
 // Routes
-router.get("/", getCategories);
-router.post("/", authentication, authorization, createCategory);
-router.put("/:id", authentication, authorization, updateCategory);
-router.delete("/:id", authentication, authorization, deleteCategory);
+router.get("/", 
+    validateGetCategories, 
+    getCategories
+);
+
+router.post("/", 
+    authentication, 
+    authorization, 
+    validateCreateCategory, 
+    createCategory
+);
+
+router.put("/:id", 
+    authentication, 
+    authorization, 
+    validateUpdateCategory, 
+    updateCategory
+);
+
+router.delete("/:id", 
+    authentication, 
+    authorization, 
+    validateDeleteCategory, 
+    deleteCategory
+);
 
 module.exports = router;
