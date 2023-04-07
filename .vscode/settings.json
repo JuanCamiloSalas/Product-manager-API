@@ -4,6 +4,8 @@
         "helpers",
         "models",
         "routes",
-        "middlewares"
+        "middlewares",
+        "validators",
+        "controllers"
     ]
 }
