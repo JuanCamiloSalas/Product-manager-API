@@ -47,7 +47,11 @@ const getProducts = async (req, res) => {
         const next = currentPage >= pages ? null : `${url}page=${currentPage+1}`;
         const previus = currentPage <= 1 ? null : `${url}page=${currentPage-1}`;
 
-        res.status(200).json({count, pages, previus, next, results});
+        if (page > pages) {
+            return res.status(400).json({ errors: [{msg: `No existe la página ${page}, hay ${pages} página(s) disponibles para la búsqueda deseada`}] });
+        }
+
+        return res.status(200).json({count, pages, previus, next, results});
         
     } catch (error) {
         res.status(500).json({ errors: [{msg: error.message}] });
