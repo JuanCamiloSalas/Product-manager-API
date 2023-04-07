@@ -3,9 +3,13 @@ const { Product } = require("../../db.js");
 const getProductById = async (req, res) => {
     try {
         const { id } = req.params;
+        const { role } = req.user;
 
         const product = await Product.findByPk(id);
-
+        
+        if (!product.active && role !== 'admin') {
+            return res.status(401).json({ errors: [{msg: `El usuario no puede acceder al recurso`}] });
+        }
         if (product) {
             return res.status(200).json(product);
         } else {

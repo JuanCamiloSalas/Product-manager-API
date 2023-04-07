@@ -4,7 +4,10 @@ const { Op } = require('sequelize');
 const getProducts = async (req, res) => {
     try {
         const { name, alpha, page, categoryId, createdAt } = req.query;
-
+        
+        // const { role } = req.user;
+        // let where = role && role === 'admin' ? {} : { active: true };
+        
         let where = { active: true };
         let order = [];
         let limit = 10;
@@ -34,6 +37,9 @@ const getProducts = async (req, res) => {
             limit,
             where,
             order,
+            attributes: {
+                exclude: ['description']
+            }, 
         });
 
         const count = await Product.count({where});
