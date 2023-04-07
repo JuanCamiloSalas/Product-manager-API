@@ -15,7 +15,7 @@ const {
 
 router.use("/auth", auth);
 router.use("/admin", authentication, authorization, admin);
-router.use("/categories", authentication, authorization, categories);
+router.use("/categories", categories);
 router.use("/products", products);
 
 module.exports = router;

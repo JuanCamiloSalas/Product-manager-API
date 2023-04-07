@@ -1,6 +1,12 @@
 const { Router } = require("express");
 const router = Router();
 
+// Middlewares
+const {
+    authentication,
+    authorization,
+} = require("../../middlewares/index.js");
+
 // Controllers
 const {
     getCategories, 
@@ -11,10 +17,8 @@ const {
 
 // Routes
 router.get("/", getCategories);
-router.post("/", createCategory);
-router.put("/:id", updateCategory);
-router.delete("/:id", deleteCategory);
-
-// ocultar ?
+router.post("/", authentication, authorization, createCategory);
+router.put("/:id", authentication, authorization, updateCategory);
+router.delete("/:id", authentication, authorization, deleteCategory);
 
 module.exports = router;

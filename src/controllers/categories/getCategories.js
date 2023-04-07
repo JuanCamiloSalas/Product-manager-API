@@ -5,7 +5,7 @@ const getCategories = async (req, res) => {
     try {
         const { name, alpha } = req.query;
 
-        let where = { active: true };
+        let where = {};
         let order = [];
 
         if (name) where.name = {[Op.iLike]: `%${name}%`}; 
@@ -16,7 +16,7 @@ const getCategories = async (req, res) => {
             order,
         });
 
-        const count = await Product.count({where});
+        const count = await Category.count({where});
 
         res.status(200).json({count, results});
         
