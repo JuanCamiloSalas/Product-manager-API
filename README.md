@@ -8,11 +8,11 @@ Puede ver y probar todos los endpoints en el enlace de la documentación del pro
 Para poder probar el endpoint de csv es necesario hacerlo desde una herramienta de prueba como Postman o Insomnia.
 
 
-#### Autenticación y permisos
+## Autenticación y permisos
 La autenticación de usuario se realizó con JWT, se creó un middleware que se aplica a todas las rutas que solo deben ser utilizadas por los usuarios con rol de administrador.
 
 
-#### Base de datos
+## Base de datos
 La base de datos se deployó a través del servicio de RDS de AWS, y se crearon las siguientes tablas:
 
 - User
@@ -20,7 +20,7 @@ La base de datos se deployó a través del servicio de RDS de AWS, y se crearon 
 - Product
 
 
-#### Testing
+## Testing
 Para poder ejecutar los test es necesario descargar el proyecto a local, levantar una base de datos postgres y crear un archivo .env en la carpeta raíz con los siguientes valores:
 
 	
@@ -34,7 +34,7 @@ Para poder ejecutar los test es necesario descargar el proyecto a local, levanta
 Por último, ejecutar los comandos `npm install` y `npm run test`.
 
 
-#### Features Extra!
+## Features Extra!
 **Filtros y ordenamientos:** Se agregó la posibilidad de ordenar y filtrar los resultados de las rutas get de  `/categories` y `/products`; asimismo, se agregó dentro de la respuesta de estos endpoints información extra como la cantidad de resultados, la cantidad de páginas, y la URL  de consulta de la anterior y siguiente página con los mismos parámetros ingresados.
 
 **Borrado lógico:** Se pueden ocultar productos a los usuarios sin la necesidad de borrarlos de manera permanente en la base de datos, para esto se puede acceder a la ruta `/products/:id/hide`.
