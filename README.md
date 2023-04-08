@@ -5,7 +5,7 @@ La API para controlar el registro de productos
 Puede ver y probar todos los endpoints en el enlace de la documentación del proyecto:
 > https://product-manager-api.up.railway.app/docs
 
-Para poder probar el endpoint de csv es necesario hacerlo desde una plataforma API como Postman o Insomnia.
+Para poder probar el endpoint de csv es necesario hacerlo desde una herramienta de prueba como Postman o Insomnia.
 
 #### Autenticación y permisos
 La autenticación de usuario se realizó con JWT, se creó un middleware que se aplica a todas las rutas que solo deben ser utilizadas por los usuarios con rol de administrador.
@@ -32,4 +32,4 @@ Por último, ejecutar los comandos `npm install` y `npm test`.
 
 
 #### Features Extra!
-Se agregó la posibilidad de ordenar y filtrar los resultados de las rutas get de  `/categories` y `products`; asimismo, se agregó dentro de la respuesta de estos endpoints información extra como la cantidad de resultados, la cantidad de páginas, y la URL  de consulta de la anterior y siguiente página con los mismos parámetros ingresados.
+Se agregó la posibilidad de ordenar y filtrar los resultados de las rutas get de  `/categories` y `/products`; asimismo, se agregó dentro de la respuesta de estos endpoints información extra como la cantidad de resultados, la cantidad de páginas, y la URL  de consulta de la anterior y siguiente página con los mismos parámetros ingresados.
