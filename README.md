@@ -1,7 +1,7 @@
 # Product Manager API
 La API para controlar el registro de productos
 
-#### Probar la API
+## Probar la API
 Puede ver y probar todos los endpoints en el enlace de la documentación del proyecto:
 > https://product-manager-api.up.railway.app/docs
 
