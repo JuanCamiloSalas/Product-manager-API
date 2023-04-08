@@ -9,7 +9,7 @@ const { DB_USER, DB_PASSWORD, DB_PASSWORD_TEST, DB_HOST, DB_HOST_TEST, DB_NAME, 
 //     ? `postgres://${DB_USER}:${DB_PASSWORD_TEST}@${DB_HOST_TEST}/${DB_NAME_TEST}`
 //     : `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`
 
-const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`, {
+const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/productmanagerdb`, {
     logging: false,
     native: false
 });
