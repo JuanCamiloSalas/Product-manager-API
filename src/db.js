@@ -5,11 +5,11 @@ const path = require('path');
 
 const { DB_USER, DB_PASSWORD, DB_PASSWORD_TEST, DB_HOST, DB_HOST_TEST, DB_NAME, DB_NAME_TEST, NODE_ENV } = process.env;
 
-const conecction = NODE_ENV === 'test'
-    ? `postgres://${DB_USER}:${DB_PASSWORD_TEST}@${DB_HOST_TEST}/${DB_NAME_TEST}`
-    : `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`
+// const conecction = NODE_ENV === 'test'
+//     ? `postgres://${DB_USER}:${DB_PASSWORD_TEST}@${DB_HOST_TEST}/${DB_NAME_TEST}`
+//     : `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`
 
-const sequelize = new Sequelize(conecction, {
+const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`, {
     logging: false,
     native: false
 });
