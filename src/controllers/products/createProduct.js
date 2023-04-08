@@ -4,11 +4,16 @@ const createProduct = async (req, res) => {
     try {
         const { name, description, price, categoryId } = req.body;
 
-        const newProduct = await Product.create({ 
-            name, 
-            description, 
-            price, 
-            categoryId,
+        const newProduct = await Product.findOrCreate({
+            where: {
+                name
+            },
+            defaults: {
+                name, 
+                description, 
+                price, 
+                categoryId,
+            }
         });
 
         res.status(200).json(newProduct);
