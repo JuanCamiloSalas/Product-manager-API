@@ -26,7 +26,7 @@ Para poder ejecutar los test es necesario descargar el proyecto a local, levanta
     DB_USER = //Su usuario postgres
     DB_HOST = localhost
     DB_PASSWORD = // Su password postgres
-    SECRETA = Una clave a determinación propia para JWT
+    SECRETA = // Una clave a determinación propia para JWT
 
 Por último, ejecutar los comandos `npm install` y `npm test`.
 
