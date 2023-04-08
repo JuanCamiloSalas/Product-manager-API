@@ -3,9 +3,13 @@ const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 
-const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
+const { DB_USER, DB_PASSWORD, DB_PASSWORD_TEST, DB_HOST, DB_HOST_TEST, DB_NAME, DB_NAME_TEST, NODE_ENV } = process.env;
 
-const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/productmanagerdb`, {
+const conecction = NODE_ENV === 'test'
+    ? `postgres://${DB_USER}:${DB_PASSWORD_TEST}@${DB_HOST_TEST}/${DB_NAME_TEST}`
+    : `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`
+
+const sequelize = new Sequelize(conecction, {
     logging: false,
     native: false
 });

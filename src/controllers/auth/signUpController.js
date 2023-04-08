@@ -1,4 +1,5 @@
 const { User } = require("../../db.js");
+const { Op } = require('sequelize');
 
 // Hash
 const bcryptjs = require('bcryptjs');
