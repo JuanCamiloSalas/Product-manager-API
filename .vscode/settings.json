@@ -6,6 +6,7 @@
         "routes",
         "middlewares",
         "validators",
-        "controllers"
+        "controllers",
+        "tests"
     ]
 }
