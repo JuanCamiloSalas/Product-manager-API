@@ -5,7 +5,8 @@ const { Category, Product } = require("../src/db.js");
 
 const api = supertest(app);
 
-const token = process.env.ADMIN_TOKEN_DB_TEST;
+// Tóken de autorización para rutas de administrador
+const adminToken = process.env.ADMIN_TOKEN_DB_TEST;
 
 const initialCategories = [
     { name: "Computadores" },
@@ -29,13 +30,16 @@ const initialProducts = [
 ]
 
 beforeEach( async () => {
+    // Eliminar todos los registros al iniciar cualquier test
     Category.destroy({truncate: true, cascade: true});
     
+    // Crear categorías iniciales y asignar sus ids al objeto categoriesIds
     const computadores = await Category.create(initialCategories[0]);
     categoriesIds.computadores = computadores.dataValues.id;
     const accesorios = await Category.create(initialCategories[1]);
     categoriesIds.accesorios = accesorios.dataValues.id;
 
+    // Crear productos iniciales y asignar sus ids al objeto productsIds
     const portatil = await Product.create({ ...initialProducts[0], categoryId: computadores.dataValues.id });
     productsIds.portatil = portatil.dataValues.id;
     const mouse = await Product.create({ ...initialProducts[1], categoryId: accesorios.dataValues.id });
@@ -54,7 +58,7 @@ describe('GET: /products', () => {
 });
 
 describe('POST: /products', () => {
-    test("should respond with 401 status when Unauthorized", async () => {
+    test("should respond with status code 401 when Unauthorized", async () => {
         const newProduct = {
             name: "Teclado hp",
             description: "Teclado logitech",
@@ -62,7 +66,7 @@ describe('POST: /products', () => {
         }
     
         const  response = await api.post('/api/products')
-            .set('x-auth-token', `Bearer ${token}`)
+            .set('x-auth-token', `Bearer ${adminToken}`)
             .send(newProduct);
         expect(response.statusCode).toBe(401);
     });
@@ -75,7 +79,7 @@ describe('POST: /products', () => {
             categoryId: categoriesIds.accesorios,
         }
         await api.post('/api/products')
-            .set('x-auth-token', `Bearer ${token}`)
+            .set('x-auth-token', `Bearer ${adminToken}`)
             .send(newProduct);
 
         const response = await Product.findAll();
@@ -83,16 +87,125 @@ describe('POST: /products', () => {
     });
 });
 
-describe('GET: /products/:id', () => {
-    test("should respond with 401 status when user is not logged in", async () => {
+describe.skip('GET: /products/:id', () => {
+    test("should respond with status code 401 when user is not logged in", async () => {
         await api
             .get(`/api/products/${productsIds.portatil}`)
             .expect(401)
     });
 
-    test.skip("should respond with 400 status when bad request id", async () => {
+    test("should respond with status code 400 when bad request id", async () => {
         await api
             .get(`/api/products/wrongid`)
             .expect(400)
+    });
+
+    test("should respond with status code 404 when product does not exists", async () => {
+        const inventedUUID = "136d2fbd-efb6-4690-bf69-e6766cf31828";
+        await api
+            .get(`/api/products/${inventedUUID}`)
+            .expect(404)
+    });
+
+    test("should respond with status code 200 when product exists", async () => {
+        await api
+            .get(`/api/products/${productsIds.portatil}`)
+            .set('x-auth-token', `Bearer ${adminToken}`)
+            .expect('Content-Type', /application\/json/)
+    });
+
+    test("should respond with aplication/json when successfully", async () => {
+        
+        await api
+            .get(`/api/products/${productsIds.portatil}`)
+            .set('x-auth-token', `Bearer ${adminToken}`)
+            .send(updatedProduct)
+            .expect(200)
+    });
+});
+
+describe.skip('PUT: /products/:id', () => {
+    test("should respond with status code 401 when user is not logged in", async () => {
+        await api
+            .put(`/api/products/${productsIds.portatil}`)
+            .expect(401)
+    });
+
+    test("should respond with status code 400 when bad request id", async () => {
+        await api
+            .put(`/api/products/wrongid`)
+            .expect(400)
+    });
+
+    test("should respond with status code 404 when product does not exists", async () => {
+        const inventedUUID = "136d2fbd-efb6-4690-bf69-e6766cf31828";
+        await api
+            .put(`/api/products/${inventedUUID}`)
+            .expect(404)
+    });
+
+    test("should respond with status code 200 when product exists", async () => {
+        const updatedProduct = {
+            name: "Portátil Lenovo 2.0",
+            description: "portátil subió de precio",
+            price: 320,
+        }
+        
+        await api
+            .put(`/api/products/${productsIds.portatil}`)
+            .set('x-auth-token', `Bearer ${adminToken}`)
+            .send(updatedProduct)
+            .expect(200)
+    });
+
+    test("should respond with aplication/json when successfully", async () => {
+        const updatedProduct = {
+            name: "Portátil Lenovo 2.0",
+            description: "portátil subió de precio",
+            price: 320,
+        }
+        
+        await api
+            .put(`/api/products/${productsIds.portatil}`)
+            .set('x-auth-token', `Bearer ${adminToken}`)
+            .send(updatedProduct)
+            .expect(200)
+    });
+});
+
+describe.skip('DELETE: /products/:id', () => {
+    test("should respond with status code 401 when user is not logged in", async () => {
+        await api
+            .delete(`/api/products/${productsIds.portatil}`)
+            .expect(401)
+    });
+
+    test("should respond with status code 400 when bad request id", async () => {
+        await api
+            .delete(`/api/products/wrongid`)
+            .expect(400)
+    });
+
+    test("should respond with status code 404 when product does not exists", async () => {
+        const inventedUUID = "136d2fbd-efb6-4690-bf69-e6766cf31828";
+        await api
+            .delete(`/api/products/${inventedUUID}`)
+            .expect(404)
+    });
+
+    test("should respond with status code 200 when product exists", async () => {
+        await api
+            .delete(`/api/products/${productsIds.portatil}`)
+            .set('x-auth-token', `Bearer ${adminToken}`)
+            .expect('Content-Type', /application\/json/)
+    });
+
+    test("should respond with aplication/json when successfully", async () => {
+        
+        await api
+            .delete(`/api/products/${productsIds.portatil}`)
+            .set('x-auth-token', `Bearer ${adminToken}`)
+            .send(updatedProduct)
+            .expect(200)
     });
 });
