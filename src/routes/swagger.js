@@ -213,16 +213,14 @@
  *       description: Identificador
  *       schema:
  *         type: string
- *         example: 9250bfa6-c1f7-4ce1-8e5a-7bb6c79b5263
  * 
  *     x-auth-token:
  *       in: header
  *       name: x-auth-token
  *       required: true
- *       description: Tóken de autenticación de usuario
+ *       description: Tóken de autenticación de usuario (proporcionado en rutas /auth)
  *       schema:
  *         type: string
- *         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
  *     
  *     page:
  *       in: query
@@ -611,7 +609,10 @@
  *         $ref: '#/components/responses/NotFound'
  *       500:
  *         $ref: '#/components/responses/ServerError'
- * 
+ */
+/**
+ * @swagger
+ * /categories/{id}:
  *   put:
  *     summary: Edita una categoría
  *     tags: [Categories]
