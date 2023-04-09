@@ -7,7 +7,7 @@ const getProductById = async (req, res) => {
 
         const product = await Product.findByPk(id);
         
-        if (!product.active && role !== 'admin') {
+        if (!product.dataValues.active && role !== 'admin') {
             return res.status(401).json({ errors: [{msg: `El usuario no puede acceder al recurso`}] });
         }
         if (product) {

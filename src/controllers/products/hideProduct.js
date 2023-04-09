@@ -13,7 +13,7 @@ const hideProduct = async (req, res) => {
         updatedProduct.active = !updatedProduct.active;
         await updatedProduct.save();
 
-        if (!updatedProduct.active) {
+        if (!updatedProduct.dataValues.active) {
             return res.status(200).json({ msg: "El producto se ha ocultado"});
         } else {
             return res.status(200).json({ msg: "El producto es ahora público"});
