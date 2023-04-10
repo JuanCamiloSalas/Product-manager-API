@@ -76,6 +76,7 @@ const convertCSV = async(req, res, next) => {
         next();
 
     } catch (error) {
+        console.error("ConvertCSV Error:\n");
         res.send(error.message);
     }
 }

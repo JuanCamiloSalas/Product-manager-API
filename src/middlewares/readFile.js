@@ -17,6 +17,7 @@ const readFile = (req, res, next) => {
         });
         
     } catch (error) {
+        console.log("readFile Error: \n",error);
         res.send(error.message);
     }
 }

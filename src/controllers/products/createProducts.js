@@ -22,6 +22,7 @@ const createProducts = async(req, res) => {
             })
         
     } catch (error) {
+        console.log("Createproducts Error:\n", error);
         res.send(error.message);
     }
 }
