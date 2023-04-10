@@ -8,7 +8,7 @@ const convertCSV = async(req, res, next) => {
         const allLines = table.replace(/\r/g, '').split('\n');
         const header = allLines[0];
         const dataLines = allLines.slice(1); 
-        const fieldNames = header.split(',');
+        const fieldNames = header.split(';');
 
         // Validar que la tabla sea de 4 columnas
         if (fieldNames.length !== 4) {
@@ -34,7 +34,7 @@ const convertCSV = async(req, res, next) => {
         let productsList = [];
         for (let i = 0; i < dataLines.length; i++) {
             let obj = {};
-            const data = dataLines[i].split(',');
+            const data = dataLines[i].split(';');
 
             for (let j = 0; j < fieldNames.length; j++) {
 
@@ -42,17 +42,22 @@ const convertCSV = async(req, res, next) => {
                 const fielName = fieldNames[j];
 
                 if (fielName === 'price') { 
-
+                    console.log(dataEl);
                     dataEl = Number(dataEl);
-                    if (Number.isNaN(dataEl)) 
+                    if (Number.isNaN(dataEl)) {
                         return res.status(400).json({ msg: `price debe ser de tipo number`});
-
+                    }
                 } else if (fielName === 'categoryId') {
 
                     dataEl = String(dataEl).trim();
-                    if (!categoriesIds.includes(dataEl)) 
+                    if (!categoriesIds.includes(dataEl)) {
                         return res.status(404).json({ msg: `El categoryId ${dataEl} No existe en la base de datos`});
-                
+                    }
+                } else if (fielName === 'description') {
+                    dataEl = String(dataEl);
+                    if (dataEl.length > 600) {
+                        return res.status(400).json({ msg: `La description ${dataEl} supera el límite de 700 caracteres`});
+                    }
                 } else {
                     dataEl = String(dataEl).trim();
                 }
