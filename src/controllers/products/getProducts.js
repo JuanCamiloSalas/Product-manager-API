@@ -1,4 +1,4 @@
-const { Product } = require("../../db.js");
+const { Product, Category } = require("../../db.js");
 const { Op } = require('sequelize');
 
 const getProducts = async (req, res) => {
@@ -38,8 +38,14 @@ const getProducts = async (req, res) => {
             where,
             order,
             attributes: {
-                exclude: ['description']
-            }, 
+                exclude: ['description', 'categoryId']
+            },
+            include: [
+                {
+                    model: Category,
+                    attributes: ['name', 'id']
+                }
+            ]
         });
 
         const count = await Product.count({where});
