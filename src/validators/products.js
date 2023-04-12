@@ -28,27 +28,22 @@ const validateGetProducts = [
         .isString()
         .withMessage("alpha debe ser una string")
         .trim()
-        .custom((value) => {
-            const correctValue = value === 'ASC' || value === 'DESC' ? true : false;
-            if (correctValue) {
-                return true;
-            } else {
-                throw new Error("alpha solo puede ser 'ASC' o 'DESC'");
-            }
-        }),
+        .isIn(['ASC', 'DESC'])
+        .withMessage("alpha solo puede ser 'ASC' o 'DESC'"),
+    check('price')
+        .optional()
+        .isString()
+        .withMessage("price debe ser una string")
+        .trim()
+        .isIn(['ASC', 'DESC'])
+        .withMessage("price solo puede ser 'ASC' o 'DESC'"),
     check('createdAt')
         .optional()
         .isString()
         .withMessage("createdAt debe ser una string")
         .trim()
-        .custom((value) => {
-            const correctValue = value === 'ASC' || value === 'DESC' ? true : false;
-            if (correctValue) {
-                return true;
-            } else {
-                throw new Error("createdAt solo puede ser 'ASC' o 'DESC'");
-            }
-        }),
+        .isIn(['ASC', 'DESC'])
+        .withMessage("createdAt solo puede ser 'ASC' o 'DESC'"),
     (req, res, next) => {
         validateResult(req, res, next);
     }
@@ -69,15 +64,15 @@ const validateCreateProduct = [
         .withMessage("name debe ser una string")
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isLength({ min: 2, max: 50 })
-        .withMessage("name debe estar entre 2 y 50 caracteres"),
+        .isLength({ min: 3, max: 50 })
+        .withMessage("name debe estar entre 3 y 50 caracteres"),
     check('description')
         .isString()
         .withMessage("description debe ser una string")
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isLength({ min:20, max: 500 })
-        .withMessage("description debe estar entre 20 y 500 caracteres"),
+        .isLength({ min: 20, max: 700 })
+        .withMessage("description debe estar entre 20 y 700 caracteres"),
     check('price')
         .customSanitizer((value) => Number(value))
         .isNumeric()
@@ -85,12 +80,6 @@ const validateCreateProduct = [
     check('categoryId')
         .isUUID()
         .withMessage("categoryId debe ser de tipo UUID"),
-    (req, res, next) => {
-        validateResult(req, res, next);
-    }
-];
-
-const validateCreateProducts = [
     (req, res, next) => {
         validateResult(req, res, next);
     }
@@ -106,16 +95,16 @@ const validateUpdateProduct = [
         .withMessage("name debe ser una string")
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isLength({ min: 2, max: 50 })
-        .withMessage("name debe estar entre 2 y 50 caracteres"),
+        .isLength({ min: 3, max: 50 })
+        .withMessage("name debe estar entre 3 y 50 caracteres"),
     check('description')
         .optional()
         .isString()
         .withMessage("description debe ser una string")
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isLength({ min:20, max: 500 })
-        .withMessage("description debe estar entre 20 y 500 caracteres"),
+        .isLength({ min: 20, max: 700 })
+        .withMessage("description debe estar entre 20 y 700 caracteres"),
     check('price')
         .optional()
         .customSanitizer((value) => Number(value))
@@ -152,7 +141,6 @@ module.exports = {
     validateGetProducts,
     validateGetProductById, 
     validateCreateProduct,
-    validateCreateProducts,
     validateUpdateProduct,
     validateDeleteProduct,
     validateHideProduct,
