@@ -15,7 +15,6 @@ const {
     validateGetProducts,
     validateGetProductById, 
     validateCreateProduct,
-    validateCreateProducts,
     validateUpdateProduct,
     validateDeleteProduct,
     validateHideProduct,
@@ -50,7 +49,6 @@ router.post("/csv",
     uploadFile, 
     readFile, 
     convertCSV, 
-    // validateCreateProducts,
     createProducts
 );
 
