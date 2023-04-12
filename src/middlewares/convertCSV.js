@@ -1,4 +1,6 @@
 const { Category } = require("../db.js");
+const validateData = require("../helpers/validateData.js");
+const validateFieldNames = require("../helpers/validateHeader.js");
 
 const convertCSV = async(req, res, next) => {
     try {
@@ -10,25 +12,13 @@ const convertCSV = async(req, res, next) => {
         const dataLines = allLines.slice(1); 
         const fieldNames = header.split(';');
 
-        // Validar que la tabla sea de 4 columnas
-        if (fieldNames.length !== 4) {
-            return res.status(400).json({ msg: `La tabla debe tener 4 columnas`});
-        }
-
-        // Validar que tenga los campos exigidos
-        const requiredHeaders = ['name', 'description', 'price', 'categoryId'];
-        for (const el of requiredHeaders) {
-            if (!fieldNames.includes(el)) {
-                return res.status(400).json({ msg: `La columna ${el} es requerida`});
-            }
-        }
+        // Validar cabecera
+        const error = validateFieldNames(fieldNames);
+        if (error.exist) return res.status(400).json({ errors: [{ msg: `${error.message}`}]});
 
         // Buscar todos los Ids de las categorías
-        const categories = await Category.findAll({
-            attributes: ['id'], 
-        });
+        const categories = await Category.findAll({ attributes: ['id'], });
         const categoriesIds = categories.map(el => el.dataValues.id);
-
 
         // Crear los objetos de cada producto
         let productsList = [];
@@ -38,35 +28,13 @@ const convertCSV = async(req, res, next) => {
 
             for (let j = 0; j < fieldNames.length; j++) {
 
-                let dataEl = data[j];
                 const fielName = fieldNames[j];
 
-                if (fielName === 'price') { 
-                    console.log(dataEl);
-                    dataEl = Number(dataEl);
-                    if (Number.isNaN(dataEl)) {
-                        return res.status(400).json({ msg: `price debe ser de tipo number`});
-                    }
-                } else if (fielName === 'categoryId') {
+                // Validación de datos
+                const { error, dataCleaned } = validateData(fielName, data[j], categoriesIds);
+                if (error.exist) return res.status(error.status).json({ errors: [{ msg: `${error.message}`}]});
 
-                    dataEl = String(dataEl).trim();
-                    if (!categoriesIds.includes(dataEl)) {
-                        return res.status(404).json({ msg: `El categoryId ${dataEl} No existe en la base de datos`});
-                    }
-                } else if (fielName === 'description') {
-                    dataEl = String(dataEl);
-                    if (dataEl.length > 600) {
-                        return res.status(400).json({ msg: `La description ${dataEl} supera el límite de 700 caracteres`});
-                    }
-                } else {
-                    dataEl = String(dataEl).trim();
-                }
-
-                if (String(dataEl).trim().length <= 0) {
-                    return res.status(400).json({ msg: `No se permiten campos vacíos`});
-                }
-
-                obj[fielName] = dataEl;
+                obj[fielName] = dataCleaned;
             }
 
             productsList.push(obj);
@@ -76,8 +44,7 @@ const convertCSV = async(req, res, next) => {
         next();
 
     } catch (error) {
-        console.error("ConvertCSV Error:\n");
-        res.send(error.message);
+        res.json({ errors: [{msg: error.message}] });
     }
 }
 
