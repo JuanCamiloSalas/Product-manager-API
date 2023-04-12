@@ -9,8 +9,8 @@ const validateGetCategories = [
         .isString()
         .withMessage("name debe ser una string")
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
-        .isLength({ max: 25 })
-        .withMessage("name debe ser menor o igual a 25 caracteres")
+        .isLength({ max: 50 })
+        .withMessage("name debe ser menor o igual a 50 caracteres")
         .not()
         .isEmpty()
         .withMessage("name no puede ser un string vacío"),
@@ -19,14 +19,8 @@ const validateGetCategories = [
         .isString()
         .withMessage("alpha debe ser una string")
         .trim()
-        .custom(value => {
-            const correctValue = value === 'ASC' || value === 'DESC' ? true : false;
-            if (correctValue) {
-                return true;
-            } else {
-                throw new Error("alpha solo puede ser 'ASC' o 'DESC'");
-            }
-        }),
+        .isIn(['ASC', 'DESC'])
+        .withMessage("alpha solo puede ser 'ASC' o 'DESC'"),
     (req, res, next) => {
         validateResult(req, res, next);
     }
@@ -38,8 +32,8 @@ const validateCreateCategory = [
         .withMessage("name debe ser una string")
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isLength({ min: 2, max: 25 })
-        .withMessage("name debe estar entre 2 y 25 caracteres")
+        .isLength({ min: 3, max: 50 })
+        .withMessage("name debe estar entre 3 y 50 caracteres")
         .escape(),
     (req, res, next) => {
         validateResult(req, res, next);
@@ -49,14 +43,14 @@ const validateCreateCategory = [
 const validateUpdateCategory = [
     check('id')
         .isUUID()
-        .withMessage("El id del usuario debe ser de tipo UUID"),
+        .withMessage("El id de la categoría debe ser de tipo UUID"),
     check('name')
         .isString()
         .withMessage("name debe ser una string")
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
-        .isLength({ min: 2, max: 25 })
-        .withMessage("name debe estar entre 2 y 25 caracteres")
-        .escape(),
+        .escape()
+        .isLength({ min: 3, max: 50 })
+        .withMessage("name debe estar entre 3 y 50 caracteres"),
     (req, res, next) => {
         validateResult(req, res, next);
     }

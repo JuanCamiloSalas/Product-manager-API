@@ -14,8 +14,8 @@ const validateGetProducts = [
         .isString()
         .withMessage("name debe ser una string")
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
-        .isLength({ max: 25 })
-        .withMessage("name debe ser menor o igual a 25 caracteres")
+        .isLength({ max: 50 })
+        .withMessage("name debe ser menor o igual a 50 caracteres")
         .not()
         .isEmpty()
         .withMessage("name no puede ser un string vacío"),
