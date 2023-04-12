@@ -1,9 +1,14 @@
-const { Product } = require("../../db.js");
+const { Product, Category } = require("../../db.js");
 
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, description, price, categoryId } = req.body;
+
+        const category = Category.findByPk(categoryId);
+        if (!category) {
+            return res.status(404).json({ errors: [{msg: `La categoría con categoryId ${categoryId} NO existe en la base de datos`}] });
+        }
 
         const updatedProduct = await Product.update({ 
             name, 
