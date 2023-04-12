@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 
 const getProducts = async (req, res) => {
     try {
-        const { name, alpha, page, categoryId, createdAt } = req.query;
+        const { name, alpha, page, categoryId, createdAt, price } = req.query;
         
         // const { role } = req.user;
         // let where = role && role === 'admin' ? {} : { active: true };
@@ -27,6 +27,10 @@ const getProducts = async (req, res) => {
             order.push(['name', `${alpha}`]); 
             url = `${url}alpha=${alpha}&`;
         }
+        if (price) {
+            order.push(['price', `${price}`]); 
+            url = `${url}price=${price}&`;
+        }
         if (createdAt) {
             order.push(['createdAt', `${createdAt}`]); 
             url = `${url}createdAt=${createdAt}&`;
@@ -38,7 +42,7 @@ const getProducts = async (req, res) => {
             where,
             order,
             attributes: {
-                exclude: ['description', 'categoryId']
+                exclude: ['description', 'categoryId', 'active']
             },
             include: [
                 {

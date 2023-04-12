@@ -263,11 +263,20 @@
  *         type: string
  *         enum: ['ASC', 'DESC']
  * 
+ *     price:
+ *       in: query
+ *       name: price
+ *       required: false
+ *       description: Ordena los resultados por precio tanto ascendente como descendentemente
+ *       schema:
+ *         type: string
+ *         enum: ['ASC', 'DESC']
+ * 
  *     createdAt:
  *       in: query
  *       name: createdAt
  *       required: false
- *       description: Ordena los resultados por fecha de creación de tanto ascendente como descendentemente
+ *       description: Ordena los resultados por fecha de creación tanto ascendente como descendentemente
  *       schema:
  *         type: string
  *         enum: ['ASC', 'DESC']
@@ -304,6 +313,7 @@
  *       - $ref: '#/components/parameters/page'
  *       - $ref: '#/components/parameters/name'
  *       - $ref: '#/components/parameters/categoryId'
+ *       - $ref: '#/components/parameters/price'
  *       - $ref: '#/components/parameters/alpha'
  *       - $ref: '#/components/parameters/createdAt'
  *     responses:
