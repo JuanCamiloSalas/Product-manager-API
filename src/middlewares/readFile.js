@@ -3,7 +3,11 @@ const fs = require("fs");
 const readFile = (req, res, next) => {
     try {
 
-        const { filename } = req.file;
+        const filename = req.file?.filename || null;
+
+        if (!filename) {
+            return res.status(400).json({ errors: [{ value: `${filename}`, msg: "Envíe un archivo por parámetro file vía body", param: "file", location: "body"}]});
+        }
 
         fs.readdir('./src/uploads', (error, files) => {
             if (error) throw new Error(error);
@@ -17,8 +21,7 @@ const readFile = (req, res, next) => {
         });
         
     } catch (error) {
-        console.log("readFile Error: \n",error);
-        res.send(error.message);
+        return res.status(500).json({ errors: [{ msg: error.message, location: "readFile" }]});
     }
 }
 
