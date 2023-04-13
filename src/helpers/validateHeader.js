@@ -1,11 +1,14 @@
 const validateFieldNames = (fieldNames) => {
     const error = {
         exist: false,
+        location: "body",
     }
 
     if (fieldNames.length !== 4) {
         error.exist = true;
-        error.message = "La tabla debe tener 4 columnas";
+        error.value = `${fieldNames.length}`;
+        error.msg = "La tabla debe tener 4 columnas";
+        error.param = "header del .csv";
         return error;
     }
 
@@ -13,7 +16,9 @@ const validateFieldNames = (fieldNames) => {
     for (const el of requiredHeaders) {
         if (!fieldNames.includes(el)) {
             error.exist = true;
-            error.message = `La columna ${el} es requerida`;
+            error.value = null;
+            error.msg = `La columna ${el} es requerida`;
+            error.param = `${el}`;
             return error;
         }
     }

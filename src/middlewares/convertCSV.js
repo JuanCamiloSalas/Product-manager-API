@@ -13,8 +13,10 @@ const convertCSV = async(req, res, next) => {
         const fieldNames = header.split(';');
 
         // Validar cabecera
-        const error = validateFieldNames(fieldNames);
-        if (error.exist) return res.status(400).json({ errors: [{ msg: `${error.message}`}]});
+        const { exist, ...errorInfo } = validateFieldNames(fieldNames);
+        if (exist) {
+            return res.status(400).json({ errors: [ errorInfo ]});
+        }
 
         // Buscar todos los Ids de las categorías
         const categories = await Category.findAll({ attributes: ['id'], });
@@ -32,7 +34,10 @@ const convertCSV = async(req, res, next) => {
 
                 // Validación de datos
                 const { error, dataCleaned } = validateData(fielName, data[j], categoriesIds);
-                if (error.exist) return res.status(error.status).json({ errors: [{ msg: `${error.message}`}]});
+                const { exist, status, ...errorInfo } = error;
+                if (exist) {
+                    return res.status(status).json({ errors: [ errorInfo ]});
+                }
 
                 obj[fielName] = dataCleaned;
             }
@@ -44,7 +49,7 @@ const convertCSV = async(req, res, next) => {
         next();
 
     } catch (error) {
-        res.json({ errors: [{msg: error.message}] });
+        res.status(500).json({ errors: [{msg: error.message, location: "convertCSV"}] });
     }
 }
 
