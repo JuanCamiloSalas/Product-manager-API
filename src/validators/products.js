@@ -2,48 +2,52 @@
 const { check } = require('express-validator');
 const validateResult = require('../helpers/validateHelper.js');
 
+// Constantes
+const { PRODUCT } = require('../constants/models.js');
+const { MSG_PRODUCT, MSG_CONST } = require('../constants/messages.js');
+
 // Validaciones
 const validateGetProducts = [
     check('page')
         .optional()
         .customSanitizer((value) => Number(value))
         .isNumeric()
-        .withMessage("page debe ser un valor numérico"),
+        .withMessage(MSG_CONST.IS_NUMBER),
     check('name')
         .optional()
         .isString()
-        .withMessage("name debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
-        .isLength({ max: 50 })
-        .withMessage("name debe ser menor o igual a 50 caracteres")
+        .isLength({ max: PRODUCT.NAME.LENGTH[1] })
+        .withMessage(MSG_PRODUCT.ERROR.NAME_LENGTH_MAX)
         .not()
         .isEmpty()
-        .withMessage("name no puede ser un string vacío"),
+        .withMessage(MSG_CONST.EMPTY_STRING),
     check('categoryId')
         .optional()
         .isUUID()
-        .withMessage("categoryId debe ser de tipo UUID"),
+        .withMessage(MSG_CONST.IS_UUID),
     check('alpha')
         .optional()
         .isString()
-        .withMessage("alpha debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .trim()
         .isIn(['ASC', 'DESC'])
-        .withMessage("alpha solo puede ser 'ASC' o 'DESC'"),
+        .withMessage(MSG_CONST.ORDER),
     check('price')
         .optional()
         .isString()
-        .withMessage("price debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .trim()
         .isIn(['ASC', 'DESC'])
-        .withMessage("price solo puede ser 'ASC' o 'DESC'"),
+        .withMessage(MSG_CONST.ORDER),
     check('createdAt')
         .optional()
         .isString()
-        .withMessage("createdAt debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .trim()
         .isIn(['ASC', 'DESC'])
-        .withMessage("createdAt solo puede ser 'ASC' o 'DESC'"),
+        .withMessage(MSG_CONST.ORDER),
     (req, res, next) => {
         validateResult(req, res, next);
     }
@@ -52,7 +56,7 @@ const validateGetProducts = [
 const validateGetProductById = [
     check('id')
         .isUUID()
-        .withMessage("id debe ser de tipo UUID"),
+        .withMessage(MSG_CONST.IS_UUID),
     (req, res, next) => {
         validateResult(req, res, next);
     }
@@ -61,25 +65,25 @@ const validateGetProductById = [
 const validateCreateProduct = [
     check('name')
         .isString()
-        .withMessage("name debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isLength({ min: 3, max: 50 })
-        .withMessage("name debe estar entre 3 y 50 caracteres"),
+        .isLength({ min: PRODUCT.NAME.LENGTH[0], max: PRODUCT.NAME.LENGTH[1] })
+        .withMessage(MSG_PRODUCT.ERROR.NAME_LENGTH),
     check('description')
         .isString()
-        .withMessage("description debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isLength({ min: 20, max: 700 })
-        .withMessage("description debe estar entre 20 y 700 caracteres"),
+        .isLength({ min: PRODUCT.DESC.LENGTH[0], max: PRODUCT.DESC.LENGTH[1] })
+        .withMessage(MSG_PRODUCT.ERROR.DESC_LENGTH),
     check('price')
         .customSanitizer((value) => Number(value))
         .isNumeric()
-        .withMessage("price debe ser un valor numérico"),
+        .withMessage(MSG_CONST.IS_NUMBER),
     check('categoryId')
         .isUUID()
-        .withMessage("categoryId debe ser de tipo UUID"),
+        .withMessage(MSG_CONST.IS_UUID),
     (req, res, next) => {
         validateResult(req, res, next);
     }
@@ -88,32 +92,32 @@ const validateCreateProduct = [
 const validateUpdateProduct = [
     check('id')
         .isUUID()
-        .withMessage("id debe ser de tipo UUID"),
+        .withMessage(MSG_CONST.IS_UUID),
     check('name')
         .optional()
         .isString()
-        .withMessage("name debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isLength({ min: 3, max: 50 })
-        .withMessage("name debe estar entre 3 y 50 caracteres"),
+        .isLength({ min: PRODUCT.NAME.LENGTH[0], max: PRODUCT.NAME.LENGTH[1] })
+        .withMessage(MSG_PRODUCT.ERROR.NAME_LENGTH),
     check('description')
         .optional()
         .isString()
-        .withMessage("description debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isLength({ min: 20, max: 700 })
-        .withMessage("description debe estar entre 20 y 700 caracteres"),
+        .isLength({ min: PRODUCT.DESC.LENGTH[0], max: PRODUCT.DESC.LENGTH[1] })
+        .withMessage(MSG_PRODUCT.ERROR.DESC_LENGTH),
     check('price')
         .optional()
         .customSanitizer((value) => Number(value))
         .isNumeric()
-        .withMessage("price debe ser un valor numérico"),
+        .withMessage(MSG_CONST.IS_NUMBER),
     check('categoryId')
         .optional()
         .isUUID()
-        .withMessage("categoryId debe ser de tipo UUID"),
+        .withMessage(MSG_CONST.IS_UUID),
     (req, res, next) => {
         validateResult(req, res, next);
     }
@@ -122,7 +126,7 @@ const validateUpdateProduct = [
 const validateDeleteProduct = [
     check('id')
         .isUUID()
-        .withMessage("id debe ser de tipo UUID"),
+        .withMessage(MSG_CONST.IS_UUID),
     (req, res, next) => {
         validateResult(req, res, next);
     }
@@ -131,7 +135,7 @@ const validateDeleteProduct = [
 const validateHideProduct = [
     check('id')
         .isUUID()
-        .withMessage("id debe ser de tipo UUID"),
+        .withMessage(MSG_CONST.IS_UUID),
     (req, res, next) => {
         validateResult(req, res, next);
     }

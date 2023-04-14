@@ -2,26 +2,29 @@
 const { check } = require('express-validator');
 const validateResult = require('../helpers/validateHelper.js');
 
+// Constantes
+const { USER } = require("../constants/models.js");
+const { MSG_USER, MSG_CONST } = require('../constants/messages.js');
+
 // Validaciones
 const validateSignUp = [
     check("name")
-        .trim()
+        .isString()
+        .withMessage(MSG_CONST.IS_STRING)
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isString()
-        .withMessage("name debe ser una string")
-        .isLength({ min: 2, max: 25 })
-        .withMessage("name debe estar entre 2 y 25 caracteres"),
+        .isLength({ min: USER.NAME.LENGTH[0], max: USER.NAME.LENGTH[1] })
+        .withMessage(MSG_USER.ERROR.NAME_LENGTH),
     check("password")
-        .isLength({ min: 8, max: 20 })
-        .withMessage("password debe estar entre 8 y 20 caracteres")
-        .matches(/^(?!.*\s)(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/)
-        .withMessage("password debe estar sin espacios y al menos una mayúscula"),
+        .isLength({ min: USER.PWD.LENGTH[0], max: USER.PWD.LENGTH[1] })
+        .withMessage(MSG_USER.ERROR.PWD_LENGTH)
+        .matches(USER.PWD.REGEXP)
+        .withMessage(MSG_USER.ERROR.PWD_REGEXP),
     check("email")
         .trim()
         .normalizeEmail()
         .isEmail()
-        .withMessage("El email enviado no cumple con el formato correspondiente"),
+        .withMessage(MSG_USER.ERROR.EMAIL),
     (req, res, next) => {
         validateResult(req, res, next);
     },
@@ -32,11 +35,12 @@ const validateLogIn = [
         .normalizeEmail()
         .trim()
         .isEmail()
-        .withMessage("El email enviado no cumple con el formato correspondiente"),
+        .withMessage(MSG_USER.ERROR.EMAIL),
     check('password')
-        .trim()
-        .matches(/^(?!.*\s)(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/)
-        .withMessage("password debe estar entre 8 y 20 caracteres, sin espacios y al menos una mayúscula"),
+        .isLength({ min: USER.PWD.LENGTH[0], max: USER.PWD.LENGTH[1] })
+        .withMessage(MSG_USER.ERROR.PWD_LENGTH)
+        .matches(USER.PWD.REGEXP)
+        .withMessage(MSG_USER.ERROR.PWD_REGEXP),
     (req, res, next) => {
         validateResult(req, res, next);
     }

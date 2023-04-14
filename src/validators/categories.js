@@ -2,25 +2,29 @@
 const { check } = require('express-validator');
 const validateResult = require('../helpers/validateHelper.js');
 
+// Constantes
+const { MSG_CONST, MSG_CATEGORY } = require('../constants/messages.js');
+const { CATEGORY } = require('../constants/models.js');
+
 // Validaciones
 const validateGetCategories = [
     check('name')
         .optional()
         .isString()
-        .withMessage("name debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
-        .isLength({ max: 50 })
-        .withMessage("name debe ser menor o igual a 50 caracteres")
+        .isLength({ max: CATEGORY.NAME.LENGTH[1] })
+        .withMessage(MSG_CATEGORY.ERROR.NAME_LENGTH_MAX)
         .not()
         .isEmpty()
-        .withMessage("name no puede ser un string vacío"),
+        .withMessage(MSG_CONST.EMPTY_STRING),
     check('alpha')
         .optional()
         .isString()
-        .withMessage("alpha debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .trim()
         .isIn(['ASC', 'DESC'])
-        .withMessage("alpha solo puede ser 'ASC' o 'DESC'"),
+        .withMessage(MSG_CONST.ORDER),
     (req, res, next) => {
         validateResult(req, res, next);
     }
@@ -29,11 +33,11 @@ const validateGetCategories = [
 const validateCreateCategory = [
     check('name')
         .isString()
-        .withMessage("name debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isLength({ min: 3, max: 50 })
-        .withMessage("name debe estar entre 3 y 50 caracteres")
+        .isLength({ min: CATEGORY.NAME.LENGTH[0], max: CATEGORY.NAME.LENGTH[1] })
+        .withMessage(MSG_CATEGORY.ERROR.NAME_LENGTH)
         .escape(),
     (req, res, next) => {
         validateResult(req, res, next);
@@ -43,14 +47,14 @@ const validateCreateCategory = [
 const validateUpdateCategory = [
     check('id')
         .isUUID()
-        .withMessage("El id de la categoría debe ser de tipo UUID"),
+        .withMessage(MSG_CONST.IS_UUID),
     check('name')
         .isString()
-        .withMessage("name debe ser una string")
+        .withMessage(MSG_CONST.IS_STRING)
         .customSanitizer((value) => value.replace(/\s+/g, ' ').trim())
         .escape()
-        .isLength({ min: 3, max: 50 })
-        .withMessage("name debe estar entre 3 y 50 caracteres"),
+        .isLength({ min: CATEGORY.NAME.LENGTH[0], max: CATEGORY.NAME.LENGTH[1] })
+        .withMessage(MSG_CATEGORY.ERROR.NAME_LENGTH),
     (req, res, next) => {
         validateResult(req, res, next);
     }
@@ -59,7 +63,7 @@ const validateUpdateCategory = [
 const validateDeleteCategory = [
     check('id')
         .isUUID()
-        .withMessage("El id del usuario debe ser de tipo UUID"),
+        .withMessage(MSG_CONST.IS_UUID),
     (req, res, next) => {
         validateResult(req, res, next);
     }
