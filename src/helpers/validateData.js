@@ -1,3 +1,7 @@
+// Constantes
+const { MSG_PRODUCT, MSG_CONST } = require("../constants/messages.js");
+const { PRODUCT, REGEXP } = require("../constants/models.js");
+
 const validateData = (fieldName, dataEl, categoriesIds = []) => {
     const error = {
         value: dataEl,
@@ -11,18 +15,18 @@ const validateData = (fieldName, dataEl, categoriesIds = []) => {
     switch (fieldName) {
         case 'name':
             const name = encodeURIComponent(String(dataEl).replace(/\s+/g, ' ').trim()).replace(/%20/g, " ");
-            if (name.length < 3 || name.length > 80) {
+            if (name.length < PRODUCT.NAME.LENGTH[0] || name.length > PRODUCT.NAME.LENGTH[1]) {
                 error.exist = true;
-                error.msg = "name debe estar entre 3 y 50 caracteres";
+                error.msg = MSG_PRODUCT.ERROR.NAME_LENGTH;
                 return { error };
             }
             return { error, dataCleaned: name };
 
         case 'description':
             const description = encodeURIComponent(String(dataEl).replace(/\s+/g, ' ').trim()).replace(/%20/g, " ");
-            if (description.length < 20 || description.length > 700) {
+            if (description.length < PRODUCT.DESC.LENGTH[0] || description.length > PRODUCT.DESC.LENGTH[1]) {
                 error.exist = true;
-                error.msg = "description debe estar entre 20 y 700 caracteres";
+                error.msg = MSG_PRODUCT.ERROR.DESC_LENGTH;
                 return { error };
             }
             return { error, dataCleaned: description };
@@ -31,22 +35,21 @@ const validateData = (fieldName, dataEl, categoriesIds = []) => {
             const price = Number(dataEl);
             if (!Number(price)) {
                 error.exist = true;
-                error.msg = "price debe ser de tipo Number";
+                error.msg = MSG_CONST.IS_NUMBER;
                 return { error };
             }
             return { error, dataCleaned: price };
             
         case 'categoryId':
             const categoryId = String(dataEl).trim();
-            const isUUID = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
-            if (!isUUID.test(categoryId)) {
+            if (!REGEXP.IS_UUID.test(categoryId)) {
                 error.exist = true;
-                error.msg = `categoryId debe ser de tipo UUID`;
+                error.msg = MSG_CONST.IS_UUID;
                 return { error };
             }
             if (!categoriesIds.includes(categoryId)) {
                 error.exist = true;
-                error.msg = `El categoryId ${categoryId} No existe en la base de datos`;
+                error.msg = MSG_CONST.NOT_FOUND;
                 error.status = 404;
                 return { error };
             }
